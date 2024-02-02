@@ -2,13 +2,13 @@
 'use client'
 import DeleteBtn from "@/utility/DeleteBtn";
 import Link from "next/link";
-import getStudentData from './fetchStudent'
+import getStudentData from "./fetchData";
 
 
 const StudentList = async () => {
+const data = await getStudentData()
+console.log(data)
 
-  const studentData = await getStudentData()
-  // console.log(studentData)
 
   return (
     <div className="relative overflow-x-auto py-10">
@@ -39,7 +39,7 @@ const StudentList = async () => {
           </tr>
         </thead>
         <tbody>
-          {studentData?.map((student, index) => (
+          {data?.map((student, index) => (
             <tr
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               key={index}
