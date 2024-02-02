@@ -7,7 +7,7 @@ import getStudentData from "./fetchData";
 
 const StudentList = async () => {
 const data = await getStudentData()
-console.log(data)
+// console.log(data)
 
 
   return (

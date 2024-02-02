@@ -5,14 +5,14 @@
  => API should be created to get all students together. (GET) (done)
 */
 
-import prisma from "@/libs/Prisma";
 import StudentDataValidate from "@/utility/StudentValidation";
 import { NextResponse } from "next/server";
-
+import { PrismaClient } from "@prisma/client";
 
 // get all users
 export async function GET(req, res) {
   try {
+    const prisma = new PrismaClient();
     const result = await prisma.user.findMany({
       orderBy: {
         id: "desc",
@@ -46,6 +46,7 @@ export async function POST(req, res) {
         { status: 400 }
       );
     }
+    const prisma = new PrismaClient();
     const result = await prisma.user.create({
       data: reqBody,
     });
@@ -69,7 +70,7 @@ export async function PUT(req, res) {
 
     const { searchParams } = new URL(req.nextUrl);
     const id = Number(searchParams.get("id"));
-
+    const prisma = new PrismaClient();
     const result = await prisma.user.update({
       where: {
         id: id,
@@ -93,7 +94,7 @@ export async function DELETE(req, res) {
   try {
     const { searchParams } = new URL(req.nextUrl);
     const id = Number(searchParams.get("id"));
-
+    const prisma = new PrismaClient();
     const result = await prisma.user.delete({
       where: {
         id: id,
