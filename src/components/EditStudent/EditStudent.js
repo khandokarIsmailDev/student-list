@@ -18,6 +18,7 @@ const EditStudent = () => {
                 const res = await fetch(`/api/v1/manyStudents?id=${id}`);
                 const data = await res.json();
                 setStudent(data.data);
+
             } catch (e) {
                 console.log(e)
             }
@@ -40,6 +41,7 @@ const EditStudent = () => {
         if (data.status === "success") {
             setLoading(false);
             toast.success(data.message);
+            router.push('/');
         } else {
             setLoading(false);
         }

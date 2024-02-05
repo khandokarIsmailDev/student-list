@@ -33,7 +33,7 @@ const DeleteBtn = (id) => {
           await deleteStudentData(id);
         }}
       >
-        delete
+        delete 
       </button>
       <Toaster position="top-right" reverseOrder={false} />
     </>

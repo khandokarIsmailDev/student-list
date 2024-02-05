@@ -2,12 +2,62 @@
 'use client'
 import DeleteBtn from "@/utility/DeleteBtn";
 import Link from "next/link";
-import getStudentData from "./fetchData";
+import { useEffect, useState } from "react";
+import {getStudentData} from "./fetchData"
+import toast from "react-hot-toast";
 
 
-const StudentList = async () => {
-const data = await getStudentData()
-// console.log(data)
+const StudentList =  () => {
+  const [studentData,setStudentData] = useState([])
+
+
+console.log(studentData)
+
+useEffect(()=>{
+  let ignore = false;
+  async function allData(){
+    const fetchData = await getStudentData()
+    if(!ignore){
+      setStudentData([...fetchData])
+    }
+
+    return () =>{
+      ignore=true
+    }
+    
+  }
+
+  allData()
+},[])
+
+
+async function handleDelete(studentId){
+  // console.log(studentId)
+  try {
+    let confirm = window.confirm(
+      "Are you sure you want to delete this student?"
+    );
+    if (confirm) {
+      const res = await fetch(`/api/v1/user?id=${studentId}`, {
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (data["status"] === "success") {
+        toast.success(data["message"])
+      } else {
+        toast.error(data["message"]);
+      }
+
+      let deleteStudent = studentData.filter(student => student.id !== studentId) 
+      setStudentData(deleteStudent)
+
+    }
+  } catch (e) {
+    toast.error(e);
+  }
+}
+
+
 
 
   return (
@@ -39,7 +89,7 @@ const data = await getStudentData()
           </tr>
         </thead>
         <tbody>
-          {data?.map((student, index) => (
+          {  studentData?.map((student, index) => (
             <tr
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               key={index}
@@ -66,7 +116,12 @@ const data = await getStudentData()
                 </Link>
                 &nbsp;
                 <Link href="#" className="bg-red-100 px-2 py-2 rounded">
-                  <DeleteBtn id={student["id"]} />
+                  {/* <DeleteBtn id={student["id"]} /> */}
+                  <button
+                    onClick={()=>handleDelete(student['id'])}
+                  >
+                    Delete
+                  </button>
                 </Link>
               </td>
             </tr>
